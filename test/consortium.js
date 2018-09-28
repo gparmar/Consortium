@@ -7,11 +7,12 @@ var account4 = "0x760ff916dc6be5d84dd0771de46a32358559af17";
 
 var collateral1 = "123abc";
 var collateral2 = "321cba";
+var collateral3 = "231bca";
 
 var meta;
 
 contract('Consortium', function(accounts) {
-  it("Add 3 members to the consortium",
+  it("Owner adds 3 members to the consortium\n\n",
     function() {
       return Consortium.deployed().then(function(instance){
         meta = instance;
@@ -43,7 +44,21 @@ contract('Consortium', function(accounts) {
       })
     }
   );
-  it("Member 1 adds a collateral 1", function() {
+  it("Non-Owner adds a member to the consortium. It should error out\n\n",
+    function() {
+      return Consortium.deployed().then(function(instance){
+        meta = instance;
+        return meta.addMember(account4,"HDFC",{from:account2});
+      })
+      .then(function(result){
+        //console.log("result:"+util.inspect(result, {showHidden: false, depth: 3}));
+      })
+      .catch(function(e) {
+        console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
+      })
+    }
+  );
+  it("Member 1 adds a collateral 1\n\n", function() {
     return Consortium.deployed().then(function(instance) {
       meta = instance;
       return meta.addCollateral(collateral1, {from: owner_account});
@@ -55,7 +70,7 @@ contract('Consortium', function(accounts) {
       console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
     });
   });
-  it("Member 2 adds a collateral 2", function() {
+  it("Member 2 adds a collateral 2\n\n", function() {
     return Consortium.deployed().then(function(instance) {
       meta = instance;
       return meta.addCollateral(collateral2, {from: account2});
@@ -67,7 +82,19 @@ contract('Consortium', function(accounts) {
       console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
     });
   });
-  it("Member 3 adds a collateral 1. It should error since collateral 1 is already syndicated", function() {
+  it("Member 4 who is not a member of the consortium adds a collateral 3. It should error out.\n\n", function() {
+    return Consortium.deployed().then(function(instance) {
+      meta = instance;
+      return meta.addCollateral(collateral3, {from: account4});
+    })
+    .then(function(result){
+      //console.log("result:"+util.inspect(result, {showHidden: false, depth: null}));
+    })
+    .catch(function(e) {
+      console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
+    });
+  });
+  it("Member 3 adds a collateral 1. It should error since collateral 1 is already syndicated\n\n", function() {
     return Consortium.deployed().then(function(instance) {
       meta = instance;
       return meta.addCollateral(collateral1, {from: account3});
@@ -79,7 +106,19 @@ contract('Consortium', function(accounts) {
       console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
     });
   });
-  it("Collateral 1 is freed from syndication", function() {
+  it("Collateral 2 is tried to be freed from syndication by another member. It should error out.\n\n", function() {
+    return Consortium.deployed().then(function(instance) {
+      meta = instance;
+      return meta.removeCollateral(collateral2, {from: owner_account});
+    })
+    .then(function(result){
+      //console.log("result:"+util.inspect(result, {showHidden: false, depth: null}));
+    })
+    .catch(function(e) {
+      console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
+    });
+  });
+  it("Collateral 1 is freed from syndication by its owner\n\n", function() {
     return Consortium.deployed().then(function(instance) {
       meta = instance;
       return meta.removeCollateral(collateral1, {from: owner_account});
@@ -91,7 +130,7 @@ contract('Consortium', function(accounts) {
       console.log("error:"+util.inspect(e, {showHidden: false, depth: null}));
     });
   });
-  it("Member 3 adds a collateral 1. This time it should pass.", function() {
+  it("Member 3 adds a collateral 1. This time it should pass.\n\n", function() {
     return Consortium.deployed().then(function(instance) {
       meta = instance;
       return meta.addCollateral(collateral1, {from: account3});
