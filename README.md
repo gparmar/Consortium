@@ -10,6 +10,7 @@ This is a small Smart Contract project created to demonstrate the utility of Sma
 - After a collateral is removed any member can add it back. Meaning that the lendee has again syndicated the asset.
 
 ## How to run the demo
+The following instructions are on how to download the project and run the tests all the above features explained above. For a deep dive you can open the various testcases and see what/how the tests are structured. The main program is Consortium.sol in the contracts folder.
 1. If you don't already have truffle install it using this command:
 > npm i -g truffle
 2. If you don't already have ganache-cli install it using this command:
@@ -74,3 +75,6 @@ Using network 'development'.
 
   8 passing (2s)
 ```
+
+# Next steps
+This was a demostration on a private node. The code could be extended to be more feature rich and can be installed on a multi-node network for testing like Ropsten, Kovan or Rinkeby Test Networks. You could go a step further and deploy it on the Ethereum Network. A web interface could be made to interact with the smart contract.
